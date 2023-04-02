@@ -1,16 +1,19 @@
 function printdirfigs(varargin)
 
-if nargin<2
-    filetype='pdf';
-else
-    filetype=varargin{2};
-end
-if nargin<1
+
+if nargin<1 || isempty(varargin{1})
     files=dir('*.fig');
 else
     files=varargin{1};
     validateattributes(files,{'struct','cell'});
 end
+
+if nargin<2 || isempty(varargin{2})
+    filetype='pdf';
+else
+    filetype=varargin{2};
+end
+
 
 for f=1:length(files)
     if iscell(files)
