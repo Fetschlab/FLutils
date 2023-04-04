@@ -6,7 +6,7 @@ function [m, m_se, m_var] = calc_mean(sig, p, p_set)
 % p must be a col (e.g. coh or dir); p_set is also a col
 % sig can be a matrix, but only if rows correspond to p (mean is columnwise)
 
-% force p and p_set to be column vectors
+% CF: force p and p_set to be column vectors
 if isrow(p_set)
     p_set = p_set';
 end
