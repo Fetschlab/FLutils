@@ -53,7 +53,6 @@ function [fr,edges,hhist,hrast]=rh_plot(spktimes,align,varargin)
 % hist_smbins   how many bins to run moving average over, default is 0,
 % which means no moving average
 % 
-%
 % rejecteventsoutliers      option for trial rejection (falling 1.5x
 % outside IQR) e.g. RT. should be a vector matching the length of align
 %
@@ -111,7 +110,7 @@ if p.plot
     set(hhist,'ylim',[0 1e-10]);
     hrast=subplot('position',[pos(1)*0.9 pos(2)+pos(4)*(1-p.ratprc) pos(3)*1.1 pos(4)*p.ratprc*0.95]); %axis off;
     set(hrast,'xtick',[]); hrast.XAxis.Visible = 'off';
-    ylabel('trial #','fontsize',14)
+%     ylabel('trial #','fontsize',14)
 end
 
 fr=[];
@@ -207,17 +206,23 @@ end
 
 %% sort trials if needed (for raster viz)
 
+% can't sort and split at the same time, this still needs work
+% to be flexible
+
 if ~isempty(p.sort) 
    p.sort(1:tr_start-1) = NaN;
    p.sort(tr_end+1:end) = NaN;
-   temp = [p.split; p.sort];
-   [ttt,ind] = sortrows(temp');
-   
-%    [ttt,ind] = sort(p.sort);
+
+%    temp = [p.split p.sort];
+%    [ttt,ind] = sortrows(temp);
+
+   [ttt,ind] = sort(p.sort);
+
+% % why is this necessary??
 %    tr_start = 1;
-%    t = find(isnan(ttt));
+%    t = find(isnan(ttt(:,1)));
 %    if isempty(t)
-%        tr_end = length(ttt);
+%        tr_end = length(ttt,1);
 %    else
 %        tr_end = t(1)-1;
 %    end
@@ -274,7 +279,7 @@ for ie=1:Nov
    if isempty(p.otherevents{ie}), continue; end
    ot{ie}=nan(1,Ntr);
    for itr=tr_start:tr_end
-      ot{ie}(itr)=p.otherevents{ie}(itr)-align(itr);
+       ot{ie}(itr)=p.otherevents{ie}(itr)-align(itr);
       if p.plotsingletrialevents
           line(ot{ie}(itr),itr,'color',p.eventscolor(ie,:),'marker',p.symbols(ie),'linestyle','none','markersize',p.markersize);
       end
@@ -332,18 +337,18 @@ end
 set(gca,'ydir','reverse');
 xlim([p.tmin p.tmax]);
 ylim([tr_start-0.5 tr_end+0.5]);
-if ~isempty(p.eventsnames)&&(p.legend)&&(~p.plotsingletrialevents)
-   legend(p.eventsnames,'Location','NorthEastOutside');
-   if length(p.eventsnames)~=length(p.otherevents)+1 
-      warning('plot_raster_hist:EventsNames','Check EventsNames');
-   end
-end
+% if ~isempty(p.eventsnames)&&(p.legend)&&(~p.plotsingletrialevents)
+%    legend(p.eventsnames,'Location','NorthEastOutside');
+%    if length(p.eventsnames)~=length(p.otherevents)+1 
+%       warning('plot_raster_hist:EventsNames','Check EventsNames');
+%    end
+% end
 
 set(gca,'xtick',[]);
 tpos=get(gca,'Position');
 set(gca,'Box','off');
 if ~isempty(p.title)
-    ht=title(p.title,'fontsize',18);
+    ht=title(p.title,'fontsize',14);
     set(ht,'position',[mean([p.tmin p.tmax]) ht.Position(2) ht.Position(3)])
 end
 
@@ -353,7 +358,7 @@ end
 if p.plot
 hhist=subplot('position',[tpos(1) pos(2) tpos(3) pos(4)*(1-p.ratprc)*0.98]);cla; hold on;
 histpos=get(gca,'Position');
-ylabel('spikes s^{-1}','fontsize',14)   
+% ylabel('spikes s^{-1}','fontsize',14)   
 end
 
 % if we're splitting trials, need to loop over splits
