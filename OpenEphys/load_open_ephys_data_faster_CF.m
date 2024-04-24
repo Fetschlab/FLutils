@@ -1,4 +1,4 @@
-function [data, timestamps, info] = load_open_ephys_data_faster(filename, varargin)
+function [data, timestamps, info] = load_open_ephys_data_faster_CF(filename, varargin)
 
 %
 % [data, timestamps, info] = load_open_ephys_data(filename, [outputFormat])

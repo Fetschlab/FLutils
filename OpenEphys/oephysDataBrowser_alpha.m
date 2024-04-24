@@ -4,8 +4,6 @@
 % must set localDir and currentFileList before running (getDataFromServer does the latter)
 
 
-keyboard
-
 % 2021-02-16_16-21-35_map_Ch16_Sorting.psort
 
 
